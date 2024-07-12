@@ -7,9 +7,9 @@ const EventMap = () => {
   const [zoomLevel, setZoomLevel] = useState(1);
 
   const boothTypes = {
-    orange: { color: 'bg-orange-200', hoverColor: 'hover:bg-orange-300', icon: 'orange-icon.png' },
-    green: { color: 'bg-green-200', hoverColor: 'hover:bg-green-300', icon: 'green-icon.png' },
-    pink: { color: 'bg-pink-200', hoverColor: 'hover:bg-pink-300', icon: 'pink-icon.png' },
+    orange: { color: 'bg-orange-200', hoverColor: 'hover:bg-orange-300', icon: './product_expo_palgunma/images/boothyellow.png'  },
+    green: { color: 'bg-green-200', hoverColor: 'hover:bg-green-300', icon: './product_expo_palgunma/images/boothgreen.png'  },
+    pink: { color: 'bg-pink-200', hoverColor: 'hover:bg-pink-300', icon: './product_expo_palgunma/images/boothred.png'  },
   };
 
   const getBoothType = (id) => {
