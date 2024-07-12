@@ -1,161 +1,166 @@
-const { useState, useCallback, useMemo, lazy, Suspense } = React;
-
-const boothCategories = {
-  food: { color: 'bg-yellow-200', hoverColor: 'hover:bg-yellow-300', icon: '🍔' },
-  craft: { color: 'bg-blue-200', hoverColor: 'hover:bg-blue-300', icon: '🎨' },
-  art: { color: 'bg-green-200', hoverColor: 'hover:bg-green-300', icon: '🖼️' },
-  tech: { color: 'bg-purple-200', hoverColor: 'hover:bg-purple-300', icon: '💻' },
-};
+import React, { useState, useCallback } from 'react';
+import { Tent, UtensilsCrossed, ArrowRight, Search, ZoomIn, ZoomOut } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const EventMap = () => {
   const [selectedBooth, setSelectedBooth] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [zoomLevel, setZoomLevel] = useState(1);
 
-  const booths = useMemo(() => 
-    Array.from({ length: 40 }, (_, i) => ({
-      id: i + 1,
-      name: `ブース ${i + 1}`,
-      description: `ブース ${i + 1} の説明`,
-      products: ['商品 A', '商品 B', '商品 C'],
-      category: Object.keys(boothCategories)[i % 4],
-      link: `/booths/${i + 1}`,
-    }))
-  , []);
+  const boothTypes = {
+    orange: { color: 'bg-orange-200', hoverColor: 'hover:bg-orange-300', icon: '/images/orange-icon.png' },
+    green: { color: 'bg-green-200', hoverColor: 'hover:bg-green-300', icon: '/images/green-icon.png' },
+    pink: { color: 'bg-pink-200', hoverColor: 'hover:bg-pink-300', icon: '/images/pink-icon.png' },
+  };
 
-  const mapLayout = useMemo(() => [
-    { type: 'row', startId: 1, count: 10 },
-    { type: 'tasting' },
-    { type: 'row', startId: 11, count: 10 },
-    { type: 'row', startId: 21, count: 10 },
-    { type: 'tasting' },
-    { type: 'row', startId: 31, count: 10 },
-  ], []);
+  const getBoothType = (id) => {
+    if (id <= 34) return 'orange';
+    if (id <= 39) return 'pink';
+    return 'green';
+  };
 
-  const renderBooth = useCallback((booth, extraClass = '') => {
-    const { color, hoverColor, icon } = boothCategories[booth.category];
+  const renderBooth = useCallback((id, extraClass = '') => {
+    const type = getBoothType(id);
+    const { color, hoverColor, icon } = boothTypes[type];
     return (
-      <button
-        key={booth.id}
-        onClick={() => handleBoothClick(booth)}
-        className={`booth-button p-1 ${color} ${hoverColor} text-black text-xs rounded flex items-center justify-center ${extraClass}`}
-        aria-label={`ブース ${booth.id} を選択`}
-      >
-        {icon}
-        <span className="ml-1">{booth.id}</span>
-      </button>
+      <TooltipProvider key={id}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              onClick={() => setSelectedBooth({ id, type })}
+              className={`p-1 ${color} ${hoverColor} text-black text-xs rounded flex items-center justify-center ${extraClass}`}
+              aria-label={`ブース ${id}`}
+            >
+              <img src={icon} alt={type} className="w-4 h-4 mr-1" />
+              <span>{id}</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>ブース {id}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     );
   }, []);
 
-  const handleBoothClick = (booth) => {
-    setSelectedBooth(booth);
-  };
-
-  const renderRow = (startId, count) => (
-    <div className="flex justify-between w-full mb-4">
-      {booths.slice(startId - 1, startId - 1 + count).map(booth => renderBooth(booth, 'w-16 h-12'))}
+  const renderTastingSpace = (id, extraClass = '') => (
+    <div key={id} className={`bg-blue-200 rounded flex items-center justify-center ${extraClass}`}>
+      <UtensilsCrossed size={16} className="mr-1" />
+      <span className="text-xs">試食 {id}</span>
     </div>
   );
-
-  const renderTastingBooth = () => (
-    <div className="tasting-booth w-full h-16 mb-4">
-      <span>試食ブース</span>
-    </div>
-  );
-
-  const filteredBooths = useMemo(() => 
-    booths.filter(booth =>
-      booth.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      booth.description.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  , [booths, searchTerm]);
 
   return (
-    <div className="map-container">
-      <h1 className="map-title">イベント会場 MAP</h1>
-      <div className="mb-4 flex items-center justify-between flex-wrap">
-        <div className="flex items-center mb-2 sm:mb-0">
-          <input
+    <div className="p-4 max-w-7xl mx-auto bg-gray-100 border-4 border-orange-500 rounded-lg">
+      <h1 className="text-3xl font-bold text-center mb-6 text-orange-600">会場 MAP</h1>
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center">
+          <Input
             type="text"
             placeholder="ブースを検索..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="mr-2 p-2 border rounded"
+            className="mr-2"
           />
-          <button className="p-2 bg-blue-500 text-white rounded">検索</button>
+          <Search size={20} />
         </div>
         <div className="flex items-center">
-          <button onClick={() => setZoomLevel(prev => Math.max(0.5, prev - 0.1))} className="mr-2 p-2 bg-gray-200 rounded">縮小</button>
-          <button onClick={() => setZoomLevel(prev => Math.min(1.5, prev + 0.1))} className="p-2 bg-gray-200 rounded">拡大</button>
+          <Button onClick={() => setZoomLevel(prev => Math.max(0.5, prev - 0.1))} className="mr-2">
+            <ZoomOut size={20} />
+          </Button>
+          <Button onClick={() => setZoomLevel(prev => Math.min(1.5, prev + 0.1))}>
+            <ZoomIn size={20} />
+          </Button>
         </div>
       </div>
-      <div role="region" aria-label="イベント会場マップ" className="relative w-full bg-white rounded-lg shadow-md p-8 overflow-auto" 
-           style={{ 
-             transform: `scale(${zoomLevel})`, 
-             transformOrigin: 'top left',
-           }}>
-        {mapLayout.map((item, index) => (
-          <React.Fragment key={index}>
-            {item.type === 'row' && renderRow(item.startId, item.count)}
-            {item.type === 'tasting' && renderTastingBooth()}
-          </React.Fragment>
-        ))}
-
-        <div className="facility-label" style={{ top: '10px', right: '10px' }}>女子WC</div>
-        <div className="facility-label" style={{ bottom: '10px', left: '10px' }}>男子WC</div>
-        <div className="facility-label" style={{ top: '10px', left: '10px' }}>多目的WC</div>
-        <div className="facility-label" style={{ top: '50px', right: '10px', backgroundColor: '#2196f3' }}>屋外イベント</div>
-
-        <div className="absolute bottom-2 left-8 bg-blue-300 px-2 py-1 rounded flex items-center">
-          <span className="ml-1">入口</span>
-        </div>
-        <div className="absolute bottom-2 right-8 bg-red-300 px-2 py-1 rounded flex items-center">
-          <span className="ml-1">出口</span>
-        </div>
-      </div>
-
-      <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
-        {Object.entries(boothCategories).map(([category, { color, icon }]) => (
-          <div key={category} className={`${color} p-2 rounded flex items-center justify-center`}>
-            {icon} {category}
+      <div className="relative w-full bg-white rounded-lg shadow-md p-4 overflow-auto" style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top left' }}>
+        <div className="grid grid-cols-[1fr_200px] gap-4">
+          <div className="grid grid-cols-1 gap-6">
+            {/* 1列目: オレンジのブース10個 */}
+            <div className="flex justify-between">
+              {[...Array(10)].map((_, i) => renderBooth(i + 1, 'w-20 h-10'))}
+            </div>
+            
+            {/* 2列目: 試食スペース13個 */}
+            <div className="flex justify-between">
+              {[...Array(13)].map((_, i) => renderTastingSpace(i + 1, 'w-16 h-8'))}
+            </div>
+            
+            {/* 3列目: 2列目と同じ */}
+            <div className="flex justify-between">
+              {[...Array(13)].map((_, i) => renderTastingSpace(i + 14, 'w-16 h-8'))}
+            </div>
+            
+            {/* 4列目: オレンジのブース9個 + 試食スペース2個 */}
+            <div className="flex justify-between">
+              {[...Array(9)].map((_, i) => renderBooth(i + 11, 'w-20 h-10'))}
+              {[...Array(2)].map((_, i) => renderTastingSpace(i + 27, 'w-16 h-8'))}
+            </div>
+            
+            {/* 5列目: 4列目と同じ */}
+            <div className="flex justify-between">
+              {[...Array(9)].map((_, i) => renderBooth(i + 20, 'w-20 h-10'))}
+              {[...Array(2)].map((_, i) => renderTastingSpace(i + 29, 'w-16 h-8'))}
+            </div>
+            
+            {/* 6列目: 2列目と同じ */}
+            <div className="flex justify-between">
+              {[...Array(13)].map((_, i) => renderTastingSpace(i + 31, 'w-16 h-8'))}
+            </div>
+            
+            {/* 7列目: 6列目と同じ */}
+            <div className="flex justify-between">
+              {[...Array(13)].map((_, i) => renderTastingSpace(i + 44, 'w-16 h-8'))}
+            </div>
+            
+            {/* 8列目: オレンジのブース6個 */}
+            <div className="flex justify-start">
+              {[...Array(6)].map((_, i) => renderBooth(i + 29, 'w-20 h-10'))}
+            </div>
+            
+            {/* 9列目: ピンクのブース5個 + スペース + 緑のブース1個 + ステージ + 緑のブース1個 */}
+            <div className="flex justify-between mt-8">
+              <div className="flex">
+                {[...Array(5)].map((_, i) => renderBooth(i + 35, 'w-20 h-10'))}
+              </div>
+              <div className="flex items-center space-x-4">
+                {renderBooth(40, 'w-20 h-10')}
+                <div className="bg-yellow-200 w-28 h-10 rounded flex items-center justify-center">
+                  ステージ
+                </div>
+                {renderBooth(41, 'w-20 h-10')}
+              </div>
+            </div>
           </div>
-        ))}
-      </div>
-
-      {selectedBooth && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-4 rounded-lg">
-            <h2>{selectedBooth.name}</h2>
-            <p>{selectedBooth.description}</p>
-            <h3>商品:</h3>
-            <ul>
-              {selectedBooth.products.map((product, index) => (
-                <li key={index}>{product}</li>
-              ))}
-            </ul>
-            <button onClick={() => setSelectedBooth(null)} className="mt-4 p-2 bg-red-500 text-white rounded">
-              閉じる
-            </button>
+          
+          {/* 右側の広いスペース */}
+          <div className="bg-gray-100 rounded-lg p-4">
+            <h2 className="text-lg font-bold mb-2">イベント情報</h2>
+            <p>ここにイベントの詳細情報や注意事項などを表示できます。</p>
           </div>
         </div>
-      )}
 
-      {searchTerm && (
-        <div className="mt-4">
-          <h2 className="text-xl font-bold mb-2">検索結果:</h2>
-          <ul className="list-disc pl-5">
-            {filteredBooths.map(booth => (
-              <li key={booth.id} className="mb-1">
-                <button onClick={() => handleBoothClick(booth)} className="text-blue-600 hover:underline">
-                  {booth.name}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+        {/* Other facilities */}
+        <div className="absolute top-2 right-2 bg-blue-300 px-2 py-1 rounded text-xs">入口</div>
+        <div className="absolute bottom-2 left-2 bg-green-300 px-2 py-1 rounded text-xs">出口</div>
+      </div>
+
+      <Dialog open={!!selectedBooth} onOpenChange={() => setSelectedBooth(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>ブース {selectedBooth?.id}</DialogTitle>
+            <DialogDescription>ブースの詳細情報がここに表示されます。</DialogDescription>
+          </DialogHeader>
+          <Button onClick={() => setSelectedBooth(null)} className="mt-4">
+            閉じる
+          </Button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
 
-ReactDOM.render(<EventMap />, document.getElementById('root'));
+export default EventMap;
