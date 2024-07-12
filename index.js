@@ -1,9 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { Tent, UtensilsCrossed, ArrowRight, Search, ZoomIn, ZoomOut } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+const { useState, useCallback } = React;
+const { Tent, UtensilsCrossed, Search, ZoomIn, ZoomOut } = lucide;
 
 const EventMap = () => {
   const [selectedBooth, setSelectedBooth] = useState(null);
@@ -11,9 +7,9 @@ const EventMap = () => {
   const [zoomLevel, setZoomLevel] = useState(1);
 
   const boothTypes = {
-    orange: { color: 'bg-orange-200', hoverColor: 'hover:bg-orange-300', icon: '/images/orange-icon.png' },
-    green: { color: 'bg-green-200', hoverColor: 'hover:bg-green-300', icon: '/images/green-icon.png' },
-    pink: { color: 'bg-pink-200', hoverColor: 'hover:bg-pink-300', icon: '/images/pink-icon.png' },
+    orange: { color: 'bg-orange-200', hoverColor: 'hover:bg-orange-300', icon: 'orange-icon.png' },
+    green: { color: 'bg-green-200', hoverColor: 'hover:bg-green-300', icon: 'green-icon.png' },
+    pink: { color: 'bg-pink-200', hoverColor: 'hover:bg-pink-300', icon: 'pink-icon.png' },
   };
 
   const getBoothType = (id) => {
@@ -26,54 +22,48 @@ const EventMap = () => {
     const type = getBoothType(id);
     const { color, hoverColor, icon } = boothTypes[type];
     return (
-      <TooltipProvider key={id}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              onClick={() => setSelectedBooth({ id, type })}
-              className={`p-1 ${color} ${hoverColor} text-black text-xs rounded flex items-center justify-center ${extraClass}`}
-              aria-label={`ブース ${id}`}
-            >
-              <img src={icon} alt={type} className="w-4 h-4 mr-1" />
-              <span>{id}</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>ブース {id}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <button
+        key={id}
+        onClick={() => setSelectedBooth({ id, type })}
+        className={`booth-button ${color} ${hoverColor} ${extraClass}`}
+        aria-label={`ブース ${id}`}
+      >
+        <img src={icon} alt={type} className="w-4 h-4 mr-1" />
+        <span>{id}</span>
+      </button>
     );
   }, []);
 
   const renderTastingSpace = (id, extraClass = '') => (
-    <div key={id} className={`bg-blue-200 rounded flex items-center justify-center ${extraClass}`}>
+    <div key={id} className={`tasting-space ${extraClass}`}>
       <UtensilsCrossed size={16} className="mr-1" />
-      <span className="text-xs">試食 {id}</span>
+      <span>試食 {id}</span>
     </div>
   );
 
   return (
-    <div className="p-4 max-w-7xl mx-auto bg-gray-100 border-4 border-orange-500 rounded-lg">
-      <h1 className="text-3xl font-bold text-center mb-6 text-orange-600">会場 MAP</h1>
+    <div className="map-container">
+      <h1 className="map-title">会場 MAP</h1>
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center">
-          <Input
+          <input
             type="text"
             placeholder="ブースを検索..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="mr-2"
+            className="search-input"
           />
-          <Search size={20} />
+          <button className="search-button">
+            <Search size={20} />
+          </button>
         </div>
         <div className="flex items-center">
-          <Button onClick={() => setZoomLevel(prev => Math.max(0.5, prev - 0.1))} className="mr-2">
+          <button onClick={() => setZoomLevel(prev => Math.max(0.5, prev - 0.1))} className="zoom-button mr-2">
             <ZoomOut size={20} />
-          </Button>
-          <Button onClick={() => setZoomLevel(prev => Math.min(1.5, prev + 0.1))}>
+          </button>
+          <button onClick={() => setZoomLevel(prev => Math.min(1.5, prev + 0.1))} className="zoom-button">
             <ZoomIn size={20} />
-          </Button>
+          </button>
         </div>
       </div>
       <div className="relative w-full bg-white rounded-lg shadow-md p-4 overflow-auto" style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top left' }}>
@@ -137,30 +127,30 @@ const EventMap = () => {
           </div>
           
           {/* 右側の広いスペース */}
-          <div className="bg-gray-100 rounded-lg p-4">
+          <div className="event-info">
             <h2 className="text-lg font-bold mb-2">イベント情報</h2>
             <p>ここにイベントの詳細情報や注意事項などを表示できます。</p>
           </div>
         </div>
 
         {/* Other facilities */}
-        <div className="absolute top-2 right-2 bg-blue-300 px-2 py-1 rounded text-xs">入口</div>
-        <div className="absolute bottom-2 left-2 bg-green-300 px-2 py-1 rounded text-xs">出口</div>
+        <div className="facility-label top-2 right-2 bg-blue-300">入口</div>
+        <div className="facility-label bottom-2 left-2 bg-green-300">出口</div>
       </div>
 
-      <Dialog open={!!selectedBooth} onOpenChange={() => setSelectedBooth(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>ブース {selectedBooth?.id}</DialogTitle>
-            <DialogDescription>ブースの詳細情報がここに表示されます。</DialogDescription>
-          </DialogHeader>
-          <Button onClick={() => setSelectedBooth(null)} className="mt-4">
-            閉じる
-          </Button>
-        </DialogContent>
-      </Dialog>
+      {selectedBooth && (
+        <div className="dialog-overlay" onClick={() => setSelectedBooth(null)}>
+          <div className="dialog-content" onClick={e => e.stopPropagation()}>
+            <h2 className="dialog-title">ブース {selectedBooth.id}</h2>
+            <p className="dialog-description">ブースの詳細情報がここに表示されます。</p>
+            <button onClick={() => setSelectedBooth(null)} className="close-button">
+              閉じる
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default EventMap;
+ReactDOM.render(<EventMap />, document.getElementById('root'));
