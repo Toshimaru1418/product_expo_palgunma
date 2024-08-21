@@ -11,7 +11,7 @@
     <img src="back2.jpg" usemap="#image-map" id="responsive-image">
 
     <map name="image-map">
-        <area target="" alt="エスケー石鹼" title="エスケー石鹼" href="https://www.palsystem-gunma.coop/" coords="892,29,980,85" shape="rect">
+        <area alt="エスケー石鹸" title="エスケー石鹸" coords="892,29,980,85" shape="rect" onclick="showPopup('エスケー石鹸')">
         <area target="" alt="水宗園" title="水宗園" href="https://www.palsystem-gunma.coop/" coords="795,21,861,87" shape="rect">
         <area target="" alt="北海道漁連" title="北海道漁連" href="https://www.palsystem-gunma.coop/" coords="767,81,680,24" shape="rect">
         <area target="" alt="平田産業" title="平田産業" href="https://www.palsystem-gunma.coop/" coords="583,25,645,87" shape="rect">
@@ -20,7 +20,15 @@
         <area target="" alt="ゴミ分別ブース" title="ゴミ分別ブース" href="https://www.palsystem-gunma.coop/" coords="610,530,684,607" shape="rect">
         <area target="" alt="ステージ" title="ステージ" href="https://www.palsystem-gunma.coop/" coords="878,525,980,603" shape="rect">
     </map>
+   <!-- ポップアップウィンドウ -->
+   <div id="popup" class="popup">
+    <span id="popup-close" class="popup-close">&times;</span>
+    <h2 id="popup-title"></h2>
+    <p id="popup-description"></p>
+    <img id="popup-image" src="sample1.jpg" alt="ブースの商品画像">
+    <a id="popup-link" href="https://www.sksoap.co.jp/" target="_blank">詳細を見る</a>
+</div>
 
-    <script src="scripts.js"></script> <!-- JavaScriptファイルをリンク -->
+<script src="scripts.js"></script>
 </body>
 </html>

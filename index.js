@@ -1,4 +1,3 @@
-// JavaScriptコードでイメージマップをレスポンシブにする処理
 document.addEventListener("DOMContentLoaded", function() {
     function resizeImageMap() {
         const image = document.getElementById('responsive-image');
@@ -20,4 +19,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
     resizeImageMap();
     window.addEventListener('resize', resizeImageMap);
+});
+
+function showPopup(boothName) {
+    const popup = document.getElementById('popup');
+    const title = document.getElementById('popup-title');
+    const description = document.getElementById('popup-description');
+    const image = document.getElementById('popup-image');
+    const link = document.getElementById('popup-link');
+
+    if (boothName === 'エスケー石鹸') {
+        title.textContent = 'エスケー石鹸';
+        description.textContent = 'エスケー石鹸のブースでは、最新の洗浄技術を駆使した石鹸製品を展示しています。';
+        image.src = 'path_to_image.jpg'; // 実際の画像パスに置き換えてください
+        link.href = 'https://www.palsystem-gunma.coop/';
+        link.textContent = '詳細を見る';
+    }
+
+    popup.style.display = 'block';
+}
+
+document.getElementById('popup-close').addEventListener('click', function() {
+    document.getElementById('popup').style.display = 'none';
 });
