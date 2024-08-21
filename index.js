@@ -21,7 +21,9 @@ document.addEventListener("DOMContentLoaded", function() {
     window.addEventListener('resize', resizeImageMap);
 });
 
-function showPopup(boothName) {
+function showPopup(event, boothName) {
+    event.preventDefault();  // デフォルトのイベントをキャンセル
+
     const popup = document.getElementById('popup');
     const title = document.getElementById('popup-title');
     const description = document.getElementById('popup-description');
@@ -31,8 +33,8 @@ function showPopup(boothName) {
     if (boothName === 'エスケー石鹸') {
         title.textContent = 'エスケー石鹸';
         description.textContent = 'エスケー石鹸のブースでは、最新の洗浄技術を駆使した石鹸製品を展示しています。';
-        image.src = 'path_to_image.jpg'; // 実際の画像パスに置き換えてください
-        link.href = 'https://www.palsystem-gunma.coop/';
+        image.src = 'sample1.jpg'; // 実際の画像パスに置き換えてください
+        link.href = 'https://www.sksoap.co.jp/index.html';
         link.textContent = '詳細を見る';
     }
 
@@ -42,3 +44,4 @@ function showPopup(boothName) {
 document.getElementById('popup-close').addEventListener('click', function() {
     document.getElementById('popup').style.display = 'none';
 });
+
