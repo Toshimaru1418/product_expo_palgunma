@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
     window.addEventListener('resize', resizeImageMap);
 });
 
+// ポップアップを表示する関数
 function showPopup(event, boothName) {
     event.preventDefault();  // デフォルトのイベントをキャンセル
 
@@ -30,18 +31,61 @@ function showPopup(event, boothName) {
     const image = document.getElementById('popup-image');
     const link = document.getElementById('popup-link');
 
-    if (boothName === 'エスケー石鹸') {
-        title.textContent = 'エスケー石鹸';
-        description.textContent = 'エスケー石鹸のブースでは、最新の洗浄技術を駆使した石鹸製品を展示しています。';
-        image.src = 'sample1.jpg'; // 実際の画像パスに置き換えてください
-        link.href = 'https://www.sksoap.co.jp/index.html';
-        link.textContent = '詳細を見る';
+    switch (boothName) {
+        case 'エスケー石鹸':
+            title.textContent = 'エスケー石鹸';
+            description.textContent = 'エスケー石鹸のブースでは、最新の洗浄技術を駆使した石鹸製品を展示しています。';
+            image.src = 'sample1.jpg';
+            link.href = 'https://www.palsystem-gunma.coop/';
+            link.textContent = '詳細を見る';
+            break;
+        case '水宗園':
+            title.textContent = '水宗園';
+            description.textContent = '水宗園では、高品質なお茶の展示と試飲を提供しています。';
+            image.src = 'sample1.jpg';
+            link.href = 'https://www.palsystem-gunma.coop/';
+            break;
+        case '北海道漁連':
+            title.textContent = '北海道漁連';
+            description.textContent = '北海道漁連、高品質なお茶の展示と試飲を提供しています。';
+            image.src = 'sample1.jpg';
+            link.href = 'https://www.palsystem-gunma.coop/';
+            break;
+        case '平田産業':
+            title.textContent = '平田産業';
+            description.textContent = '平田産業、高品質なお茶の展示と試飲を提供しています。';
+            image.src = 'sample1.jpg';
+            link.href = 'https://www.palsystem-gunma.coop/';
+            break;
+        case 'グリンリーフ':
+            title.textContent = 'グリンリーフ';
+            description.textContent = 'グリンリーフ、高品質なお茶の展示と試飲を提供しています。';
+            image.src = 'sample1.jpg';
+            link.href = 'https://www.palsystem-gunma.coop/';
+            break;
+        case '河村屋':
+            title.textContent = '河村屋';
+            description.textContent = '河村屋、高品質なお茶の展示と試飲を提供しています。';
+            image.src = 'sample1.jpg';
+            link.href = 'https://www.palsystem-gunma.coop/';
+            break;
+        case 'ゴミ分別ブース':
+            title.textContent = 'ゴミ分別ブース';
+            description.textContent = 'ゴミ分別ブース、高品質なお茶の展示と試飲を提供しています。';
+            image.src = 'sample1.jpg';
+            link.href = 'https://www.palsystem-gunma.coop/';
+            break;
+        case 'ステージ':
+            title.textContent = 'ステージ';
+            description.textContent = 'ステージ、高品質なお茶の展示と試飲を提供しています。';
+            image.src = 'sample1.jpg';
+            link.href = 'https://www.palsystem-gunma.coop/';
+            break;   
     }
 
-    popup.style.display = 'block';
+    popup.style.display = 'block'; // ポップアップを表示
 }
 
 document.getElementById('popup-close').addEventListener('click', function() {
-    document.getElementById('popup').style.display = 'none';
+    document.getElementById('popup').style.display = 'none'; // ポップアップを非表示にする
 });
-
