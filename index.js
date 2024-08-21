@@ -34,52 +34,52 @@ function showPopup(event, boothName) {
     switch (boothName) {
         case 'エスケー石鹸':
             title.textContent = 'エスケー石鹸';
-            description.textContent = 'エスケー石鹸のブースでは、最新の洗浄技術を駆使した石鹸製品を展示しています。';
+            description.textContent = 'エスケー石鹸のブース説明';
             image.src = 'sample1.jpg';
             link.href = 'https://www.palsystem-gunma.coop/';
             link.textContent = '詳細を見る';
             break;
         case '水宗園':
             title.textContent = '水宗園';
-            description.textContent = '水宗園では、高品質なお茶の展示と試飲を提供しています。';
-            image.src = 'sample1.jpg';
-            link.href = 'https://www.palsystem-gunma.coop/';
+            description.textContent = '水宗園のブース説明';
+            image.src = 'sample2.jpg';
+            link.href = 'https://www.suisouen.co.jp/';
             break;
         case '北海道漁連':
             title.textContent = '北海道漁連';
-            description.textContent = '北海道漁連、高品質なお茶の展示と試飲を提供しています。';
-            image.src = 'sample1.jpg';
-            link.href = 'https://www.palsystem-gunma.coop/';
+            description.textContent = '北海道漁連のブース説明';
+            image.src = 'sample3.jpg';
+            link.href = 'https://www.gyoren.or.jp/';
             break;
         case '平田産業':
             title.textContent = '平田産業';
-            description.textContent = '平田産業、高品質なお茶の展示と試飲を提供しています。';
-            image.src = 'sample1.jpg';
-            link.href = 'https://www.palsystem-gunma.coop/';
+            description.textContent = '平田産業のブース説明';
+            image.src = 'sample4.jpg';
+            link.href = 'https://hiratasangyo.com/';
             break;
         case 'グリンリーフ':
             title.textContent = 'グリンリーフ';
-            description.textContent = 'グリンリーフ、高品質なお茶の展示と試飲を提供しています。';
-            image.src = 'sample1.jpg';
-            link.href = 'https://www.palsystem-gunma.coop/';
+            description.textContent = 'グリンリーフのブース説明';
+            image.src = 'sample5.jpg';
+            link.href = 'https://www.akn.jp/';
             break;
         case '河村屋':
             title.textContent = '河村屋';
-            description.textContent = '河村屋、高品質なお茶の展示と試飲を提供しています。';
-            image.src = 'sample1.jpg';
-            link.href = 'https://www.palsystem-gunma.coop/';
+            description.textContent = '河村屋のブース説明';
+            image.src = 'sample6.jpg';
+            link.href = 'https://www.kawamuraya.co.jp/';
             break;
         case 'ゴミ分別ブース':
             title.textContent = 'ゴミ分別ブース';
-            description.textContent = 'ゴミ分別ブース、高品質なお茶の展示と試飲を提供しています。';
-            image.src = 'sample1.jpg';
+            description.textContent = 'ゴミ分別ブースのブース説明';
+            image.src = 'sample7.jpg';
             link.href = 'https://www.palsystem-gunma.coop/';
             break;
         case 'ステージ':
             title.textContent = 'ステージ';
-            description.textContent = 'ステージ、高品質なお茶の展示と試飲を提供しています。';
-            image.src = 'sample1.jpg';
-            link.href = 'https://www.palsystem-gunma.coop/';
+            description.textContent = 'ステージのブース説明';
+            image.src = 'sample8.jpg';
+            link.href = 'https://www.palsystem-gunma2.coop/';
             break;   
     }
 
